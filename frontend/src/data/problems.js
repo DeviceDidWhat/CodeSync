@@ -65,11 +65,81 @@ class Solution {
         System.out.println(Arrays.toString(twoSum(new int[]{3, 3}, 6))); // Expected: [0, 1]
     }
 }`,
+      cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> twoSum(vector<int>& nums, int target) {
+    // Write your solution here
+    
+    return {};
+}
+
+void printVector(const vector<int>& v) {
+    cout << "[";
+    for (int i = 0; i < v.size(); i++) {
+        cout << v[i];
+        if (i < v.size() - 1) cout << ", ";
+    }
+    cout << "]" << endl;
+}
+
+int main() {
+    vector<int> test1 = {2, 7, 11, 15};
+    printVector(twoSum(test1, 9)); // Expected: [0, 1]
+    
+    vector<int> test2 = {3, 2, 4};
+    printVector(twoSum(test2, 6)); // Expected: [1, 2]
+    
+    vector<int> test3 = {3, 3};
+    printVector(twoSum(test3, 6)); // Expected: [0, 1]
+    
+    return 0;
+}`,
+      c: `#include <stdio.h>
+#include <stdlib.h>
+
+int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    // Write your solution here
+    *returnSize = 0;
+    return NULL;
+}
+
+void printArray(int* arr, int size) {
+    printf("[");
+    for (int i = 0; i < size; i++) {
+        printf("%d", arr[i]);
+        if (i < size - 1) printf(", ");
+    }
+    printf("]\\n");
+}
+
+int main() {
+    int returnSize;
+    
+    int test1[] = {2, 7, 11, 15};
+    int* result1 = twoSum(test1, 4, 9, &returnSize);
+    printArray(result1, returnSize); // Expected: [0, 1]
+    free(result1);
+    
+    int test2[] = {3, 2, 4};
+    int* result2 = twoSum(test2, 3, 6, &returnSize);
+    printArray(result2, returnSize); // Expected: [1, 2]
+    free(result2);
+    
+    int test3[] = {3, 3};
+    int* result3 = twoSum(test3, 2, 6, &returnSize);
+    printArray(result3, returnSize); // Expected: [0, 1]
+    free(result3);
+    
+    return 0;
+}`,
     },
     expectedOutput: {
       javascript: "[0,1]\n[1,2]\n[0,1]",
       python: "[0, 1]\n[1, 2]\n[0, 1]",
       java: "[0, 1]\n[1, 2]\n[0, 1]",
+      cpp: "[0, 1]\n[1, 2]\n[0, 1]",
+      c: "[0, 1]\n[1, 2]\n[0, 1]",
     },
   },
 
@@ -80,9 +150,7 @@ class Solution {
     category: "String • Two Pointers",
     description: {
       text: "Write a function that reverses a string. The input string is given as an array of characters s.",
-      notes: [
-        "You must do this by modifying the input array in-place with O(1) extra memory.",
-      ],
+      notes: ["You must do this by modifying the input array in-place with O(1) extra memory."],
     },
     examples: [
       {
@@ -139,11 +207,69 @@ class Solution {
         System.out.println(Arrays.toString(test2)); // Expected: [h, a, n, n, a, H]
     }
 }`,
+      cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+void reverseString(vector<char>& s) {
+    // Write your solution here
+    
+}
+
+void printVector(const vector<char>& v) {
+    cout << "[";
+    for (int i = 0; i < v.size(); i++) {
+        cout << v[i];
+        if (i < v.size() - 1) cout << ", ";
+    }
+    cout << "]" << endl;
+}
+
+int main() {
+    vector<char> test1 = {'h','e','l','l','o'};
+    reverseString(test1);
+    printVector(test1); // Expected: [o, l, l, e, h]
+    
+    vector<char> test2 = {'H','a','n','n','a','h'};
+    reverseString(test2);
+    printVector(test2); // Expected: [h, a, n, n, a, H]
+    
+    return 0;
+}`,
+      c: `#include <stdio.h>
+#include <string.h>
+
+void reverseString(char* s, int sSize) {
+    // Write your solution here
+    
+}
+
+void printArray(char* arr, int size) {
+    printf("[");
+    for (int i = 0; i < size; i++) {
+        printf("%c", arr[i]);
+        if (i < size - 1) printf(", ");
+    }
+    printf("]\\n");
+}
+
+int main() {
+    char test1[] = {'h','e','l','l','o'};
+    reverseString(test1, 5);
+    printArray(test1, 5); // Expected: [o, l, l, e, h]
+    
+    char test2[] = {'H','a','n','n','a','h'};
+    reverseString(test2, 6);
+    printArray(test2, 6); // Expected: [h, a, n, n, a, H]
+    
+    return 0;
+}`,
     },
     expectedOutput: {
       javascript: '["o","l","l","e","h"]\n["h","a","n","n","a","H"]',
       python: "['o', 'l', 'l', 'e', 'h']\n['h', 'a', 'n', 'n', 'a', 'H']",
       java: "[o, l, l, e, h]\n[h, a, n, n, a, H]",
+      cpp: "[o, l, l, e, h]\n[h, a, n, n, a, H]",
+      c: "[o, l, l, e, h]\n[h, a, n, n, a, H]",
     },
   },
 
@@ -154,9 +280,7 @@ class Solution {
     category: "String • Two Pointers",
     description: {
       text: "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.",
-      notes: [
-        "Given a string s, return true if it is a palindrome, or false otherwise.",
-      ],
+      notes: ["Given a string s, return true if it is a palindrome, or false otherwise."],
     },
     examples: [
       {
@@ -176,10 +300,7 @@ class Solution {
           's is an empty string "" after removing non-alphanumeric characters. Since an empty string reads the same forward and backward, it is a palindrome.',
       },
     ],
-    constraints: [
-      "1 ≤ s.length ≤ 2 * 10⁵",
-      "s consists only of printable ASCII characters",
-    ],
+    constraints: ["1 ≤ s.length ≤ 2 * 10⁵", "s consists only of printable ASCII characters"],
     starterCode: {
       javascript: `function isPalindrome(s) {
   // Write your solution here
@@ -211,11 +332,47 @@ print(isPalindrome(" "))  # Expected: True`,
         System.out.println(isPalindrome(" ")); // Expected: true
     }
 }`,
+      cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+bool isPalindrome(string s) {
+    // Write your solution here
+    
+    return false;
+}
+
+int main() {
+    cout << (isPalindrome("A man, a plan, a canal: Panama") ? "true" : "false") << endl; // Expected: true
+    cout << (isPalindrome("race a car") ? "true" : "false") << endl; // Expected: false
+    cout << (isPalindrome(" ") ? "true" : "false") << endl; // Expected: true
+    
+    return 0;
+}`,
+      c: `#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+#include <ctype.h>
+
+bool isPalindrome(char* s) {
+    // Write your solution here
+    
+    return false;
+}
+
+int main() {
+    printf("%s\\n", isPalindrome("A man, a plan, a canal: Panama") ? "true" : "false"); // Expected: true
+    printf("%s\\n", isPalindrome("race a car") ? "true" : "false"); // Expected: false
+    printf("%s\\n", isPalindrome(" ") ? "true" : "false"); // Expected: true
+    
+    return 0;
+}`,
     },
     expectedOutput: {
       javascript: "true\nfalse\ntrue",
       python: "True\nFalse\nTrue",
       java: "true\nfalse\ntrue",
+      cpp: "true\nfalse\ntrue",
+      c: "true\nfalse\ntrue",
     },
   },
 
@@ -277,11 +434,54 @@ print(maxSubArray([5,4,-1,7,8]))  # Expected: 23`,
         System.out.println(maxSubArray(new int[]{5,4,-1,7,8})); // Expected: 23
     }
 }`,
+      cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+int maxSubArray(vector<int>& nums) {
+    // Write your solution here
+    
+    return 0;
+}
+
+int main() {
+    vector<int> test1 = {-2,1,-3,4,-1,2,1,-5,4};
+    cout << maxSubArray(test1) << endl; // Expected: 6
+    
+    vector<int> test2 = {1};
+    cout << maxSubArray(test2) << endl; // Expected: 1
+    
+    vector<int> test3 = {5,4,-1,7,8};
+    cout << maxSubArray(test3) << endl; // Expected: 23
+    
+    return 0;
+}`,
+      c: `#include <stdio.h>
+
+int maxSubArray(int* nums, int numsSize) {
+    // Write your solution here
+    
+    return 0;
+}
+
+int main() {
+    int test1[] = {-2,1,-3,4,-1,2,1,-5,4};
+    printf("%d\\n", maxSubArray(test1, 9)); // Expected: 6
+    
+    int test2[] = {1};
+    printf("%d\\n", maxSubArray(test2, 1)); // Expected: 1
+    
+    int test3[] = {5,4,-1,7,8};
+    printf("%d\\n", maxSubArray(test3, 5)); // Expected: 23
+    
+    return 0;
+}`,
     },
     expectedOutput: {
       javascript: "6\n1\n23",
       python: "6\n1\n23",
       java: "6\n1\n23",
+      cpp: "6\n1\n23",
+      c: "6\n1\n23",
     },
   },
 
@@ -339,296 +539,48 @@ print(maxArea([1,1]))  # Expected: 1`,
         System.out.println(maxArea(new int[]{1,1})); // Expected: 1
     }
 }`,
+      cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+int maxArea(vector<int>& height) {
+    // Write your solution here
+    
+    return 0;
+}
+
+int main() {
+    vector<int> test1 = {1,8,6,2,5,4,8,3,7};
+    cout << maxArea(test1) << endl; // Expected: 49
+    
+    vector<int> test2 = {1,1};
+    cout << maxArea(test2) << endl; // Expected: 1
+    
+    return 0;
+}`,
+      c: `#include <stdio.h>
+
+int maxArea(int* height, int heightSize) {
+    // Write your solution here
+    
+    return 0;
+}
+
+int main() {
+    int test1[] = {1,8,6,2,5,4,8,3,7};
+    printf("%d\\n", maxArea(test1, 9)); // Expected: 49
+    
+    int test2[] = {1,1};
+    printf("%d\\n", maxArea(test2, 2)); // Expected: 1
+    
+    return 0;
+}`,
     },
     expectedOutput: {
       javascript: "49\n1",
       python: "49\n1",
       java: "49\n1",
-    },
-  },
-
-  "merge-intervals": {
-    id: "merge-intervals",
-    title: "Merge Intervals",
-    difficulty: "Medium",
-    category: "Array • Sorting",
-    description: {
-      text: "Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals.",
-      notes: [
-        "Intervals are inclusive",
-        "Return the result sorted by start time",
-      ],
-    },
-    examples: [
-      {
-        input: "intervals = [[1,3],[2,6],[8,10],[15,18]]",
-        output: "[[1,6],[8,10],[15,18]]",
-      },
-      {
-        input: "intervals = [[1,4],[4,5]]",
-        output: "[[1,5]]",
-      },
-    ],
-    constraints: [
-      "1 ≤ intervals.length ≤ 10⁴",
-      "intervals[i].length == 2",
-      "0 ≤ starti ≤ endi ≤ 10⁴",
-    ],
-    starterCode: {
-      javascript: `function merge(intervals) {
-    // Write your solution here
-    
-    }
-
-    // Test cases
-    console.log(merge([[1,3],[2,6],[8,10],[15,18]])); // Expected: [[1,6],[8,10],[15,18]]
-    console.log(merge([[1,4],[4,5]])); // Expected: [[1,5]]`,
-      python: `def merge(intervals):
-        # Write your solution here
-        pass
-
-    # Test cases
-    print(merge([[1,3],[2,6],[8,10],[15,18]]))  # Expected: [[1,6],[8,10],[15,18]]
-    print(merge([[1,4],[4,5]]))  # Expected: [[1,5]]`,
-      java: `import java.util.*;
-
-    class Solution {
-        public static int[][] merge(int[][] intervals) {
-            // Write your solution here
-            
-            return new int[0][0];
-        }
-
-        public static void main(String[] args) {
-            System.out.println(Arrays.deepToString(merge(new int[][]{{1,3},{2,6},{8,10},{15,18}})));
-            System.out.println(Arrays.deepToString(merge(new int[][]{{1,4},{4,5}})));
-        }
-    }`,
-    },
-    expectedOutput: {
-      javascript: "[[1,6],[8,10],[15,18]]\n[[1,5]]",
-      python: "[[1, 6], [8, 10], [15, 18]]\n[[1, 5]]",
-      java: "[[1,6],[8,10],[15,18]]\n[[1,5]]",
-    },
-  },
-
-  "longest-substring-without-repeating": {
-    id: "longest-substring-without-repeating",
-    title: "Longest Substring Without Repeating Characters",
-    difficulty: "Medium",
-    category: "String • Sliding Window",
-    description: {
-      text: "Given a string s, find the length of the longest substring without repeating characters.",
-      notes: ["Substring must be contiguous"],
-    },
-    examples: [
-      {
-        input: 's = "abcabcbb"',
-        output: "3",
-      },
-      {
-        input: 's = "bbbbb"',
-        output: "1",
-      },
-    ],
-    constraints: ["0 ≤ s.length ≤ 5 * 10⁴", "s consists of ASCII characters"],
-    starterCode: {
-      javascript: `function lengthOfLongestSubstring(s) {
-    // Write your solution here
-    
-    }
-
-    // Test cases
-    console.log(lengthOfLongestSubstring("abcabcbb")); // Expected: 3
-    console.log(lengthOfLongestSubstring("bbbbb")); // Expected: 1`,
-      python: `def lengthOfLongestSubstring(s):
-        # Write your solution here
-        pass
-
-    # Test cases
-    print(lengthOfLongestSubstring("abcabcbb"))  # Expected: 3
-    print(lengthOfLongestSubstring("bbbbb"))  # Expected: 1`,
-      java: `class Solution {
-        public static int lengthOfLongestSubstring(String s) {
-            // Write your solution here
-            
-            return 0;
-        }
-
-        public static void main(String[] args) {
-            System.out.println(lengthOfLongestSubstring("abcabcbb")); // Expected: 3
-            System.out.println(lengthOfLongestSubstring("bbbbb")); // Expected: 1
-        }
-    }`,
-    },
-    expectedOutput: {
-      javascript: "3\n1",
-      python: "3\n1",
-      java: "3\n1",
-    },
-  },
-
-  "binary-tree-level-order-traversal": {
-    id: "binary-tree-level-order-traversal",
-    title: "Binary Tree Level Order Traversal",
-    difficulty: "Medium",
-    category: "Tree • BFS",
-    description: {
-      text: "Given the root of a binary tree, return the level order traversal of its nodes' values.",
-      notes: ["Traverse level by level from left to right"],
-    },
-    examples: [
-      {
-        input: "root = [3,9,20,null,null,15,7]",
-        output: "[[3],[9,20],[15,7]]",
-      },
-    ],
-    constraints: ["0 ≤ number of nodes ≤ 2000", "-1000 ≤ Node.val ≤ 1000"],
-    starterCode: {
-      javascript: `function levelOrder(root) {
-    // Write your solution here
-    
-    }
-
-    // Test case
-    console.log(levelOrder([3,9,20,null,null,15,7])); // Expected: [[3],[9,20],[15,7]]`,
-      python: `def levelOrder(root):
-        # Write your solution here
-        pass
-
-    # Test case
-    print(levelOrder([3,9,20,None,None,15,7]))  # Expected: [[3],[9,20],[15,7]]`,
-      java: `import java.util.*;
-
-    class Solution {
-        public static List<List<Integer>> levelOrder(Integer[] root) {
-            // Write your solution here
-            
-            return new ArrayList<>();
-        }
-
-        public static void main(String[] args) {
-            System.out.println(levelOrder(new Integer[]{3,9,20,null,null,15,7}));
-        }
-    }`,
-    },
-    expectedOutput: {
-      javascript: "[[3],[9,20],[15,7]]",
-      python: "[[3], [9, 20], [15, 7]]",
-      java: "[[3],[9,20],[15,7]]",
-    },
-  },
-
-  "median-of-two-sorted-arrays": {
-    id: "median-of-two-sorted-arrays",
-    title: "Median of Two Sorted Arrays",
-    difficulty: "Hard",
-    category: "Array • Binary Search",
-    description: {
-      text: "Given two sorted arrays nums1 and nums2, return the median of the two sorted arrays.",
-      notes: ["Overall time complexity must be O(log(m+n))"],
-    },
-    examples: [
-      {
-        input: "nums1 = [1,3], nums2 = [2]",
-        output: "2.0",
-      },
-      {
-        input: "nums1 = [1,2], nums2 = [3,4]",
-        output: "2.5",
-      },
-    ],
-    constraints: ["0 ≤ nums1.length ≤ 1000", "0 ≤ nums2.length ≤ 1000"],
-    starterCode: {
-      javascript: `function findMedianSortedArrays(nums1, nums2) {
-    // Write your solution here
-    
-    }
-
-    // Test cases
-    console.log(findMedianSortedArrays([1,3],[2])); // Expected: 2.0
-    console.log(findMedianSortedArrays([1,2],[3,4])); // Expected: 2.5`,
-      python: `def findMedianSortedArrays(nums1, nums2):
-        # Write your solution here
-        pass
-
-    # Test cases
-    print(findMedianSortedArrays([1,3],[2]))  # Expected: 2.0
-    print(findMedianSortedArrays([1,2],[3,4]))  # Expected: 2.5`,
-      java: `class Solution {
-        public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
-            // Write your solution here
-            
-            return 0.0;
-        }
-
-        public static void main(String[] args) {
-            System.out.println(findMedianSortedArrays(new int[]{1,3}, new int[]{2}));
-            System.out.println(findMedianSortedArrays(new int[]{1,2}, new int[]{3,4}));
-        }
-    }`,
-    },
-    expectedOutput: {
-      javascript: "2.0\n2.5",
-      python: "2.0\n2.5",
-      java: "2.0\n2.5",
-    },
-  },
-
-  "word-ladder": {
-    id: "word-ladder",
-    title: "Word Ladder",
-    difficulty: "Hard",
-    category: "Graph • BFS",
-    description: {
-      text: "Return the length of the shortest transformation sequence from beginWord to endWord.",
-      notes: [
-        "Only one letter can be changed at a time",
-        "Each transformed word must exist in the word list",
-      ],
-    },
-    examples: [
-      {
-        input: 'beginWord = "hit", endWord = "cog"',
-        output: "5",
-      },
-    ],
-    constraints: [
-      "1 ≤ word length ≤ 10",
-      "All words contain lowercase letters",
-    ],
-    starterCode: {
-      javascript: `function ladderLength(beginWord, endWord, wordList) {
-    // Write your solution here
-    
-    }
-
-    // Test case
-    console.log(ladderLength("hit","cog",["hot","dot","dog","lot","log","cog"])); // Expected: 5`,
-      python: `def ladderLength(beginWord, endWord, wordList):
-        # Write your solution here
-        pass
-
-    # Test case
-    print(ladderLength("hit","cog",["hot","dot","dog","lot","log","cog"]))  # Expected: 5`,
-      java: `import java.util.*;
-
-    class Solution {
-        public static int ladderLength(String beginWord, String endWord, List<String> wordList) {
-            // Write your solution here
-            
-            return 0;
-        }
-
-        public static void main(String[] args) {
-            System.out.println(ladderLength("hit","cog", Arrays.asList("hot","dot","dog","lot","log","cog")));
-        }
-    }`,
-    },
-    expectedOutput: {
-      javascript: "5",
-      python: "5",
-      java: "5",
+      cpp: "49\n1",
+      c: "49\n1",
     },
   },
 };
@@ -648,5 +600,15 @@ export const LANGUAGE_CONFIG = {
     name: "Java",
     icon: "/java.png",
     monacoLang: "java",
+  },
+  cpp: {
+    name: "C++",
+    icon: "/cpp.png",
+    monacoLang: "cpp",
+  },
+  c: {
+    name: "C",
+    icon: "/c.png",
+    monacoLang: "c",
   },
 };
