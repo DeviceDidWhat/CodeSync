@@ -15,11 +15,11 @@ const sessionSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
-    participant: [{
+    participant: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         default: null
-    }],
+    },
     status: {
         type: String,
         enum: ["active", "completed"],
