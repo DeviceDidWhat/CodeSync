@@ -29,9 +29,7 @@ function SessionPage() {
 
   const session = sessionData?.session;
   const isHost = session?.host?.clerkId === user?.id;
-  const isParticipant = Array.isArray(session?.participant)
-    ? session.participant.some((p) => p?.clerkId === user?.id || p === user?.id)
-    : session?.participant?.clerkId === user?.id || session?.participant === user?.id;
+  const isParticipant = session?.participant?.clerkId === user?.id;
 
   const { call, channel, chatClient, isInitializingCall, streamClient } = useStreamClient(
     session,

@@ -1,9 +1,9 @@
-import { streamClient } from "../util/stream.js";
+import { chatClient } from "../util/stream.js";
 
 export async function getStreamToken(req, res) {
   try {
-    // use clerkId for Stream (not mongodb _id) => it should match the id we have in the Stream dashboard
-    const token = streamClient.createUserToken(req.user.clerkId);
+    // use clerkId for Stream (not mongodb _id)=> it should match the id we have in the stream dashboard
+    const token = chatClient.createToken(req.user.clerkId);
 
     res.status(200).json({
       token,
