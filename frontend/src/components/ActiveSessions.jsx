@@ -8,7 +8,7 @@ import {
   LoaderIcon,
 } from "lucide-react";
 import { Link } from "react-router";
-import { getDifficultyBadgeClass } from "../util/utils";
+import { getDifficultyBadgeClass, hasParticipant } from "../util/utils";
 
 function ActiveSessions({ sessions, isLoading, isUserInSession }) {
   return (
@@ -70,9 +70,9 @@ function ActiveSessions({ sessions, isLoading, isUserInSession }) {
                         </div>
                         <div className="flex items-center gap-1.5">
                           <UsersIcon className="size-4" />
-                          <span className="text-xs">{session.participant ? "2/2" : "1/2"}</span>
+                          <span className="text-xs">{hasParticipant(session) ? "2/2" : "1/2"}</span>
                         </div>
-                        {session.participant && !isUserInSession(session) ? (
+                        {hasParticipant(session) && !isUserInSession(session) ? (
                           <span className="badge badge-error badge-sm">FULL</span>
                         ) : (
                           <span className="badge badge-success badge-sm">OPEN</span>
@@ -81,7 +81,7 @@ function ActiveSessions({ sessions, isLoading, isUserInSession }) {
                     </div>
                   </div>
 
-                  {session.participant && !isUserInSession(session) ? (
+                  {hasParticipant(session) && !isUserInSession(session) ? (
                     <button className="btn btn-disabled btn-sm">Full</button>
                   ) : (
                     <Link to={`/session/${session._id}`} className="btn btn-primary btn-sm gap-2">

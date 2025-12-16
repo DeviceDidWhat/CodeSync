@@ -1,5 +1,5 @@
 import { Code2, Clock, Users, Trophy, Loader } from "lucide-react";
-import { getDifficultyBadgeClass } from "../util/utils";
+import { getDifficultyBadgeClass, hasParticipant } from "../util/utils";
 import { formatDistanceToNow } from "date-fns";
 
 function RecentSessions({ sessions, isLoading }) {
@@ -70,8 +70,8 @@ function RecentSessions({ sessions, isLoading }) {
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4" />
                       <span>
-                        {session.participant ? "2" : "1"} participant
-                        {session.participant ? "s" : ""}
+                        {hasParticipant(session) ? "2" : "1"} participant
+                        {hasParticipant(session) ? "s" : ""}
                       </span>
                     </div>
                   </div>
