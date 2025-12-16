@@ -6,7 +6,7 @@ import { PROBLEMS } from "../data/problems.js";
 import { executeCode } from "../util/piston.js";
 import Navbar from "../components/navbar";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { getDifficultyBadgeClass } from "../util/utils.js";
+import { getDifficultyBadgeClass, hasParticipant } from "../util/utils.js";
 import { Loader2Icon, LogOutIcon, PhoneOffIcon } from "lucide-react";
 import CodeEditorPanel from "../components/CodeEditorPanel";
 import OutputPanel from "../components/OutputPanel";
@@ -119,7 +119,7 @@ function SessionPage() {
                         )}
                         <p className="text-base-content/60 mt-2">
                           Host: {session?.host?.name || "Loading..."} •{" "}
-                          {session?.participant ? 2 : 1}/2 participants
+                            {hasParticipant(session) ? 2 : 1}/2 participants
                         </p>
                       </div>
 
