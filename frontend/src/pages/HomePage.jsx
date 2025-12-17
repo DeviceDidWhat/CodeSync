@@ -106,13 +106,13 @@ function HomePage() {
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4">
                 <SignInButton mode="modal">
-                    <button className="btn btn-primary btn-lg">
+                    <button className="group px-8 py-4 bg-gradient-to-r from-primary to-secondary rounded-xl text-white font-semibold text-0.5xl  shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 flex items-center gap-2">
                     Start Coding Now
                     <ArrowRightIcon className="size-5" />
                     </button>
                 </SignInButton>
 
-              <button className="px-10 py-4 ml-3 bg-slate-800 border border-emerald-500/30 rounded-lg text-emerald-300 font-semibold hover:border-emerald-400/60 hover:bg-slate-700 transition-all duration-200 flex items-center gap-2">
+              <button className="px-10 py-4 ml-7 bg-slate-800 border border-emerald-500/30 rounded-lg text-emerald-300 font-semibold hover:border-emerald-400/60 hover:bg-slate-700 transition-all duration-200 flex items-center gap-2">
                 <Video className="size-5" />
                 Watch Demo
               </button>
@@ -120,15 +120,26 @@ function HomePage() {
 
 
             {/* STATS */}
-            <div className="grid grid-cols-3 gap-6 pt-8">
+            {/* STATS */}
+            <div className="grid grid-cols-3 gap-5 pt-8">
               {[
-                { value: "10K+", label: "Active Users" },
-                { value: "50K+", label: "Sessions" },
-                { value: "99.9%", label: "Uptime" },
+                { value: "Kavya Bhanvadia, Krish Kyada", label: "Creator of CodeSync" },
+                { value: "“Clarity beats cleverness.”", label: "Interview Philosophy" },
+                { value: "“Real interviews need real tools.”", label: "Why This Exists" },
               ].map((stat) => (
-                <div key={stat.label} className="p-4 bg-slate-800/30 border border-emerald-500/20 rounded-lg backdrop-blur-sm">
-                  <div className="text-2xl font-bold text-emerald-400">{stat.value}</div>
-                  <div className="text-sm text-emerald-300/70">{stat.label}</div>
+                <div
+                  key={stat.label}
+                  className="p-3 bg-slate-800/30 border border-emerald-500/20 rounded-lg backdrop-blur-sm"
+                >
+                  {/* Value */}
+                  <div className="text-base font-semibold text-emerald-400 leading-snug">
+                    {stat.value}
+                  </div>
+
+                  {/* Label */}
+                  <div className="mt-1 text-xs text-emerald-300/70">
+                    {stat.label}
+                  </div>
                 </div>
               ))}
             </div>
