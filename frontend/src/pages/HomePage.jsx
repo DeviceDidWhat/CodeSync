@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Check, Code2, Sparkles, Users, Video, Zap ,ArrowRightIcon} from "lucide-react";
+import { Check, Code2, Users, Video, Zap ,ArrowRightIcon} from "lucide-react";
 import {SignInButton} from "@clerk/clerk-react";
 
 function HomePage() {
@@ -50,8 +50,12 @@ function HomePage() {
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           {/* LOGO */}
           <div className="flex items-center gap-3 hover:scale-105 transition-transform duration-200 group cursor-pointer">
-            <div className="size-12 rounded-xl bg-gradient-to-br from-emerald-400 via-cyan-400 to-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/50 group-hover:shadow-emerald-400/70">
-              <Sparkles className="size-7 text-slate-950" />
+            <div className="size-10 rounded-xl overflow-hidden shadow-lg">
+              <img
+                src="/Logo.png"
+                alt="CodeSync Logo"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="flex flex-col">
               <span className="font-black text-2xl bg-gradient-to-r from-emerald-400 via-cyan-300 to-emerald-300 bg-clip-text text-transparent font-mono tracking-wider">
