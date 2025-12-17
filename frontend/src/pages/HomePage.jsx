@@ -6,7 +6,7 @@ function HomePage() {
   const [terminalInput, setTerminalInput] = useState("");
   const [terminalOutput, setTerminalOutput] = useState([
     { type: "text", content: "$ Welcome to CodeSync Terminal" },
-    { type: "text", content: "$ Live video & audio calling (WebRTC based)" },
+    { type: "text", content: "$ Live video & audio calling" },
     { type: "text", content: "$ Multi-language coding support" },
     { type: "text", content: "$ Type 'help' for available commands" },
   ]);
@@ -25,7 +25,7 @@ function HomePage() {
       } else if (cmd === "connect") {
         newOutput.push({ type: "text", content: "✓ Connected to peer successfully" });
       } else if (cmd === "code") {
-        newOutput.push({ type: "text", content: "const greeting = 'Welcome to CodeSync!' 🚀" });
+        newOutput.push({ type: "text", content: "const greeting = 'Welcome to CodeSync!'" });
       } else if (cmd === "about") {
         newOutput.push({ type: "text", content: "CodeSync v1.0 - Real-time Collaborative Coding Platform" });
       } else {
