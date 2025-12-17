@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ArrowRight, Check, Code2, Sparkles, Users, Video, Zap } from "lucide-react";
+import { ArrowRight, Check, Code2, Sparkles, Users, Video, Zap ,ArrowRightIcon} from "lucide-react";
+import {SignInButton} from "@clerk/clerk-react";
 
 function HomePage() {
   const [terminalInput, setTerminalInput] = useState("");
@@ -61,12 +62,14 @@ function HomePage() {
           </div>
 
           {/* AUTH BTN */}
-          <button className="px-10 py-3 bg-emerald-500 rounded-lg text-slate-950 font-bold shadow-lg shadow-emerald-500/40 hover:bg-emerald-400 hover:shadow-xl hover:shadow-emerald-400/60 transition-all duration-200 hover:scale-105 flex items-center gap-2">
-            <span>Get Started</span>
-            <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
-      </nav>
+            <SignInButton mode="modal">
+                <button className="group px-6 py-3 bg-gradient-to-r from-primary to-secondary rounded-xl text-white font-semibold text-sm shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 flex items-center gap-2">
+                <span>Get Started</span>
+                <ArrowRightIcon className="size-4 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+            </SignInButton>
+            </div>
+        </nav>
 
       {/* HERO SECTION */}
       <div className="relative max-w-7xl mx-auto px-4 pt-5 pb-5 z-10">
@@ -101,11 +104,13 @@ function HomePage() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 pt-4">
-              <button className="px-10 py-4 bg-emerald-500 rounded-lg text-slate-950 font-bold shadow-lg shadow-emerald-500/40 hover:bg-emerald-400 hover:shadow-xl hover:shadow-emerald-400/60 transition-all duration-200 hover:scale-105 flex items-center gap-2">
-                Start Coding Now
-                <ArrowRight className="size-5" />
-              </button>
+            <div className="flex flex-wrap gap-4">
+                <SignInButton mode="modal">
+                    <button className="btn btn-primary btn-lg">
+                    Start Coding Now
+                    <ArrowRightIcon className="size-5" />
+                    </button>
+                </SignInButton>
 
               <button className="px-10 py-4 ml-3 bg-slate-800 border border-emerald-500/30 rounded-lg text-emerald-300 font-semibold hover:border-emerald-400/60 hover:bg-slate-700 transition-all duration-200 flex items-center gap-2">
                 <Video className="size-5" />
