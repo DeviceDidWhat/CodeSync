@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { PROBLEMS } from "../data/problems.js";
 import Navbar from "../components/navbar.jsx";
+import { generateCppJudge } from "../util/judge.js";
+
 
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import ProblemDescription from "../components/ProblemDescription";
@@ -18,7 +20,7 @@ function ProblemPage() {
   const navigate = useNavigate();
 
   const [currentProblemId, setCurrentProblemId] = useState("two-sum");
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+  const [selectedLanguage, setSelectedLanguage] = useState("cpp");
   const [code, setCode] = useState(PROBLEMS[currentProblemId].starterCode.javascript);
   const [output, setOutput] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -57,45 +59,63 @@ function ProblemPage() {
     });
   };
 
-  const normalizeOutput = (output) => {
-    // normalize output for comparison (trim whitespace, handle different spacing)
-    return output
-      .trim()
-      .split("\n")
-      .map((line) =>
-        line
-          .trim()
-          // remove spaces after [ and before ]
-          .replace(/'/g, '"')        // normalize quotes
-          .replace(/\[\s+/g, "[")
-          .replace(/\s+\]/g, "]")
-          // normalize spaces around commas to single space after comma
-          .replace(/\s*,\s*/g, ",")
-      )
-      .filter((line) => line.length > 0)
-      .join("\n");
-  };
+  // const normalizeOutput = (output) => {
+  //   // normalize output for comparison (trim whitespace, handle different spacing)
+  //   return output
+  //     .trim()
+  //     .split("\n")
+  //     .map((line) =>
+  //       line
+  //         .trim()
+  //         // remove spaces after [ and before ]
+  //         .replace(/'/g, '"')        // normalize quotes
+  //         .replace(/\[\s+/g, "[")
+  //         .replace(/\s+\]/g, "]")
+  //         // normalize spaces around commas to single space after comma
+  //         .replace(/\s*,\s*/g, ",")
+  //     )
+  //     .filter((line) => line.length > 0)
+  //     .join("\n");
+  // };
 
-  const checkIfTestsPassed = (actualOutput, expectedOutput) => {
-    const normalizedActual = normalizeOutput(actualOutput);
-    const normalizedExpected = normalizeOutput(expectedOutput);
+  // const checkIfTestsPassed = (actualOutput, expectedOutput) => {
+  //   const normalizedActual = normalizeOutput(actualOutput);
+  //   const normalizedExpected = normalizeOutput(expectedOutput);
 
-    return normalizedActual == normalizedExpected;
-  };
+  //   return normalizedActual == normalizedExpected;
+  // };
 
   const handleRunCode = async () => {
     setIsRunning(true);
     setOutput(null);
 
-    const result = await executeCode(selectedLanguage, code);
+    let finalCode = code;
+
+    finalCode = generateCppJudge(currentProblem, code);
+
+    const result = await executeCode(selectedLanguage, finalCode);
+
+
     setOutput(result);
     setIsRunning(false);
 
     // check if code executed successfully and matches expected output
 
     if (result.success) {
-      const expectedOutput = currentProblem.expectedOutput[selectedLanguage];
-      const testsPassed = checkIfTestsPassed(result.output, expectedOutput);
+      const actualResults = result.output
+        .trim()
+        .split("\n")
+        .map(line => line.trim());
+
+
+      const expectedResults = currentProblem.testCases.map(tc =>
+        JSON.stringify(tc.output)
+      );
+
+      const testsPassed = actualResults.every(
+        (res, i) => res === expectedResults[i]
+      );
+
 
       if (testsPassed) {
         triggerConfetti();
