@@ -1,15 +1,41 @@
 import { Link } from "react-router";
 import Navbar from "../components/navbar.jsx";
-import { PROBLEMS } from "../data/problems";
 import { ChevronRightIcon, Code2Icon } from "lucide-react";
 import { getDifficultyBadgeClass } from "../util/utils";
+import { useProblems } from "../hooks/useProblems";
 
 function ProblemsPage() {
-  const problems = Object.values(PROBLEMS);
+  // ✅ FETCH FROM DATABASE
+  const { data: problems = [], isLoading, isError } = useProblems();
 
-  const easyProblemsCount = problems.filter((p) => p.difficulty === "Easy").length;
-  const mediumProblemsCount = problems.filter((p) => p.difficulty === "Medium").length;
-  const hardProblemsCount = problems.filter((p) => p.difficulty === "Hard").length;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading problems...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Failed to load problems</p>
+      </div>
+    );
+  }
+
+  // ✅ STATS (FROM DB DATA)
+  const easyProblemsCount = problems.filter(
+    (p) => p.difficulty === "Easy"
+  ).length;
+
+  const mediumProblemsCount = problems.filter(
+    (p) => p.difficulty === "Medium"
+  ).length;
+
+  const hardProblemsCount = problems.filter(
+    (p) => p.difficulty === "Hard"
+  ).length;
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -28,8 +54,8 @@ function ProblemsPage() {
         <div className="space-y-4">
           {problems.map((problem) => (
             <Link
-              key={problem.id}
-              to={`/problem/${problem.id}`}
+              key={problem.slug}
+              to={`/problem/${problem.slug}`} // ✅ FIXED
               className="card bg-base-100 hover:scale-[1.01] transition-transform"
             >
               <div className="card-body">
@@ -40,20 +66,32 @@ function ProblemsPage() {
                       <div className="size-12 rounded-lg bg-primary/10 flex items-center justify-center">
                         <Code2Icon className="size-6 text-primary" />
                       </div>
+
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h2 className="text-xl font-bold">{problem.title}</h2>
-                          <span className={`badge ${getDifficultyBadgeClass(problem.difficulty)}`}>
+                          <h2 className="text-xl font-bold">
+                            {problem.title}
+                          </h2>
+                          <span
+                            className={`badge ${getDifficultyBadgeClass(
+                              problem.difficulty
+                            )}`}
+                          >
                             {problem.difficulty}
                           </span>
                         </div>
-                        <p className="text-sm text-base-content/60"> {problem.category}</p>
+                        <p className="text-sm text-base-content/60">
+                          {problem.category}
+                        </p>
                       </div>
                     </div>
-                    <p className="text-base-content/80 mb-3">{problem.description.text}</p>
-                  </div>
-                  {/* RIGHT SIDE */}
 
+                    <p className="text-base-content/80 mb-3 line-clamp-2">
+                      {problem.description?.text}
+                    </p>
+                  </div>
+
+                  {/* RIGHT SIDE */}
                   <div className="flex items-center gap-2 text-primary">
                     <span className="font-medium">Solve</span>
                     <ChevronRightIcon className="size-5" />
@@ -70,20 +108,30 @@ function ProblemsPage() {
             <div className="stats stats-vertical lg:stats-horizontal">
               <div className="stat">
                 <div className="stat-title">Total Problems</div>
-                <div className="stat-value text-primary">{problems.length}</div>
+                <div className="stat-value text-primary">
+                  {problems.length}
+                </div>
               </div>
 
               <div className="stat">
                 <div className="stat-title">Easy</div>
-                <div className="stat-value text-success">{easyProblemsCount}</div>
+                <div className="stat-value text-success">
+                  {easyProblemsCount}
+                </div>
               </div>
+
               <div className="stat">
                 <div className="stat-title">Medium</div>
-                <div className="stat-value text-warning">{mediumProblemsCount}</div>
+                <div className="stat-value text-warning">
+                  {mediumProblemsCount}
+                </div>
               </div>
+
               <div className="stat">
                 <div className="stat-title">Hard</div>
-                <div className="stat-value text-error">{hardProblemsCount}</div>
+                <div className="stat-value text-error">
+                  {hardProblemsCount}
+                </div>
               </div>
             </div>
           </div>
@@ -92,4 +140,5 @@ function ProblemsPage() {
     </div>
   );
 }
+
 export default ProblemsPage;

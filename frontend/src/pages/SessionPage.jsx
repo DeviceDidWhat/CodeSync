@@ -2,7 +2,8 @@ import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useEndSession, useJoinSession, useSessionById } from "../hooks/useSessions.js";
-import { PROBLEMS } from "../data/problems.js";
+import { useProblem } from "../hooks/useProblems";
+import toast from "react-hot-toast";
 import { executeCode } from "../util/piston.js";
 import Navbar from "../components/navbar";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
@@ -10,10 +11,12 @@ import { getDifficultyBadgeClass, hasParticipant } from "../util/utils.js";
 import { Loader2Icon, LogOutIcon, PhoneOffIcon } from "lucide-react";
 import CodeEditorPanel from "../components/CodeEditorPanel";
 import OutputPanel from "../components/OutputPanel";
+import { generateCppJudge } from "../util/judge.js";
 
 import useStreamClient from "../hooks/useStreamClient";
 import { StreamCall, StreamVideo } from "@stream-io/video-react-sdk";
 import VideoCallUI from "../components/VideoCallUI";
+import confetti from "canvas-confetti";
 
 function SessionPage() {
   const navigate = useNavigate();
@@ -28,6 +31,10 @@ function SessionPage() {
   const endSessionMutation = useEndSession();
 
   const session = sessionData?.session;
+  const {
+    data: problemData,
+    isLoading: loadingProblem,
+  } = useProblem(session?.problem);
   const isHost = session?.host?.clerkId === user?.id;
   const isParticipant = session?.participant?.clerkId === user?.id;
 
@@ -37,13 +44,15 @@ function SessionPage() {
     isHost,
     isParticipant
   );
+  const triggerConfetti = () => {
+    confetti({ particleCount: 80, spread: 250, origin: { x: 0.2, y: 0.6 } });
+    confetti({ particleCount: 80, spread: 250, origin: { x: 0.8, y: 0.6 } });
+  };
 
   // find the problem data based on session problem title
-  const problemData = session?.problem
-    ? Object.values(PROBLEMS).find((p) => p.title === session.problem)
-    : null;
+ 
 
-  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+  const [selectedLanguage, setSelectedLanguage] = useState("cpp");
   const [code, setCode] = useState(problemData?.starterCode?.[selectedLanguage] || "");
 
   // auto-join session if user is not already a participant and not the host
@@ -65,10 +74,11 @@ function SessionPage() {
 
   // update code when problem loads or changes
   useEffect(() => {
-    if (problemData?.starterCode?.[selectedLanguage]) {
-      setCode(problemData.starterCode[selectedLanguage]);
-    }
-  }, [problemData, selectedLanguage]);
+  if (!problemData) return;
+  setCode(problemData.starterCode?.[selectedLanguage] || "");
+  setOutput(null);
+}, [problemData, selectedLanguage]);
+
 
   const handleLanguageChange = (e) => {
     const newLang = e.target.value;
@@ -80,13 +90,54 @@ function SessionPage() {
   };
 
   const handleRunCode = async () => {
+    if (!problemData) return;
+
     setIsRunning(true);
     setOutput(null);
 
-    const result = await executeCode(selectedLanguage, code);
-    setOutput(result);
-    setIsRunning(false);
+    try {
+      const finalCode = generateCppJudge(problemData, code);
+      const result = await executeCode(selectedLanguage, finalCode);
+
+      setOutput(result);
+      setIsRunning(false);
+
+      if (!result?.success) {
+        toast.error("Code execution failed");
+        return;
+      }
+
+      // 1️⃣ Actual output from program
+      const actualResults = result.output
+        .trim()
+        .split("\n")
+        .map((line) => line.trim());
+
+      // 2️⃣ Expected output from DB
+      const expectedResults = problemData.testCases.map((tc) =>
+        String(tc.output).trim()
+      );
+
+      // 3️⃣ Compare
+      const passed =
+        actualResults.length === expectedResults.length &&
+        actualResults.every((res, i) => res === expectedResults[i]);
+
+      // 4️⃣ Show result
+      if (passed) {
+        triggerConfetti();
+        toast.success("All tests passed!");
+        confetti();
+      } else {
+        toast.error("Tests failed");
+      }
+    } catch (err) {
+      setIsRunning(false);
+      toast.error("Execution error");
+      console.log(err);
+    }
   };
+
 
   const handleEndSession = () => {
     if (confirm("Are you sure you want to end this session? All participants will be notified.")) {
@@ -210,11 +261,11 @@ function SessionPage() {
                     )}
 
                     {/* Constraints */}
-                    {problemData?.constraints && problemData.constraints.length > 0 && (
+                    {problemData?.description?.constraints?.length > 0 && (
                       <div className="bg-base-100 rounded-xl shadow-sm p-5 border border-base-300">
                         <h2 className="text-xl font-bold mb-4 text-base-content">Constraints</h2>
                         <ul className="space-y-2 text-base-content/90">
-                          {problemData.constraints.map((constraint, idx) => (
+                          {problemData.description?.constraints?.map((constraint, idx) => (
                             <li key={idx} className="flex gap-2">
                               <span className="text-primary">•</span>
                               <code className="text-sm">{constraint}</code>
