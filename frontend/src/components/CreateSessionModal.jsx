@@ -1,5 +1,4 @@
 import { Code2Icon, LoaderIcon, PlusIcon } from "lucide-react";
-import { PROBLEMS } from "../data/problems";
 
 function CreateSessionModal({
   isOpen,
@@ -8,9 +7,9 @@ function CreateSessionModal({
   setRoomConfig,
   onCreateRoom,
   isCreating,
+  problems = [],          //DB problems
+  isLoadingProblems = false,
 }) {
-  const problems = Object.values(PROBLEMS);
-
   if (!isOpen) return null;
 
   return (
@@ -22,7 +21,9 @@ function CreateSessionModal({
           {/* PROBLEM SELECTION */}
           <div className="space-y-2">
             <label className="label">
-              <span className="label-text font-semibold">Select Problem</span>
+              <span className="label-text font-semibold">
+                Select Problem
+              </span>
               <span className="label-text-alt text-error">*</span>
             </label>
 
@@ -30,19 +31,27 @@ function CreateSessionModal({
               className="select w-full"
               value={roomConfig.problem}
               onChange={(e) => {
-                const selectedProblem = problems.find((p) => p.title === e.target.value);
+                const selected = problems.find(
+                  (p) => p.slug === e.target.value
+                );
+
+                if (!selected) return;
+
                 setRoomConfig({
-                  difficulty: selectedProblem.difficulty,
-                  problem: e.target.value,
+                  problem: selected.slug,              // slug
+                  difficulty: selected.difficulty,     // auto-set
                 });
               }}
+              disabled={isLoadingProblems}
             >
               <option value="" disabled>
-                Choose a coding problem...
+                {isLoadingProblems
+                  ? "Loading problems..."
+                  : "Choose a coding problem..."}
               </option>
 
               {problems.map((problem) => (
-                <option key={problem.id} value={problem.title}>
+                <option key={problem.slug} value={problem.slug}>
                   {problem.title} ({problem.difficulty})
                 </option>
               ))}
@@ -56,10 +65,25 @@ function CreateSessionModal({
               <div>
                 <p className="font-semibold">Room Summary:</p>
                 <p>
-                  Problem: <span className="font-medium">{roomConfig.problem}</span>
+                  Problem:{" "}
+                  <span className="font-medium">
+                    {
+                      problems.find((p) => p.slug === roomConfig.problem)
+                        ?.title
+                    }
+                  </span>
                 </p>
                 <p>
-                  Max Participants: <span className="font-medium">2 (1-on-1 session)</span>
+                  Difficulty:{" "}
+                  <span className="font-medium">
+                    {roomConfig.difficulty}
+                  </span>
+                </p>
+                <p>
+                  Max Participants:{" "}
+                  <span className="font-medium">
+                    2 (1-on-1 session)
+                  </span>
                 </p>
               </div>
             </div>
@@ -81,13 +105,14 @@ function CreateSessionModal({
             ) : (
               <PlusIcon className="size-5" />
             )}
-
             {isCreating ? "Creating..." : "Create"}
           </button>
         </div>
       </div>
+
       <div className="modal-backdrop" onClick={onClose}></div>
     </div>
   );
 }
+
 export default CreateSessionModal;

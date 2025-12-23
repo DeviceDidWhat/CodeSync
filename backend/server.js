@@ -10,6 +10,8 @@ import {inngest,functions} from "./util/inngest.js"
 
 import chatRoutes from "./routes/chatRoutes.js"
 import sessionRoutes from "./routes/sessionRoute.js"
+import problemRoutes from "./routes/problemRoutes.js";
+import { protectRoute } from './middleware/protectRoute.js';
 
 const app = express();
 
@@ -25,20 +27,16 @@ app.use(clerkMiddleware());//adds auth field to request object -> req.auth()
 app.use("/api/inngest",serve({client:inngest, functions}));
 app.use("/api/chat", chatRoutes)
 app.use("/api/sessions", sessionRoutes)
+app.use("/api/problems", problemRoutes);
 
-app.get("/health", (req, res) => {
-  res.status(200).json({ msg: "api is up and running" });
+// GET /api/users/me
+app.get("/api/users/me", protectRoute, (req, res) => {
+  res.json({
+    id: req.user._id,
+    controlAdmin: req.user.controlAdmin,
+  });
 });
 
-//Testing 
-// app.get("/books", (req, res) => {
-//   res.status(200).json({ msg: "this is books endpoint" });
-// });
-
-// //on passing an array of middleware to Express it automatically flattens and executes them one by one 
-// app.get("/video-calls", protectRoute , (req, res) => {
-//   res.status(200).json({ msg: "This is a protected Route" });
-// });
 
 //making ready for deployment
 if (ENV.NODE_ENV === "production") {

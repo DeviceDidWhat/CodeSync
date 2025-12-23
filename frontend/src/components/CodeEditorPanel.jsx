@@ -10,16 +10,29 @@ function CodeEditorPanel({
   onCodeChange,
   onRunCode,
 }) {
+  // ✅ SAFE FALLBACK (very important)
+  const currentLanguage =
+    LANGUAGE_CONFIG[selectedLanguage] || LANGUAGE_CONFIG.cpp;
+
   return (
     <div className="h-full bg-base-300 flex flex-col">
       <div className="flex items-center justify-between px-4 py-3 bg-base-100 border-t border-base-300">
         <div className="flex items-center gap-3">
-          <img
-            src={LANGUAGE_CONFIG[selectedLanguage].icon}
-            alt={LANGUAGE_CONFIG[selectedLanguage].name}
-            className="size-6"
-          />
-          <select className="select select-sm" value={selectedLanguage} onChange={onLanguageChange}>
+          {/* ICON */}
+          {currentLanguage.icon && (
+            <img
+              src={currentLanguage.icon}
+              alt={currentLanguage.name}
+              className="size-6"
+            />
+          )}
+
+          {/* LANGUAGE SELECT */}
+          <select
+            className="select select-sm"
+            value={selectedLanguage}
+            onChange={onLanguageChange}
+          >
             {Object.entries(LANGUAGE_CONFIG).map(([key, lang]) => (
               <option key={key} value={key}>
                 {lang.name}
@@ -28,7 +41,12 @@ function CodeEditorPanel({
           </select>
         </div>
 
-        <button className="btn btn-primary btn-sm gap-2" disabled={isRunning} onClick={onRunCode}>
+        {/* RUN BUTTON */}
+        <button
+          className="btn btn-primary btn-sm gap-2"
+          disabled={isRunning}
+          onClick={onRunCode}
+        >
           {isRunning ? (
             <>
               <Loader2Icon className="size-4 animate-spin" />
@@ -43,10 +61,11 @@ function CodeEditorPanel({
         </button>
       </div>
 
+      {/* CODE EDITOR */}
       <div className="flex-1">
         <Editor
-          height={"100%"}
-          language={LANGUAGE_CONFIG[selectedLanguage].monacoLang}
+          height="100%"
+          language={currentLanguage.monacoLang}
           value={code}
           onChange={onCodeChange}
           theme="vs-dark"
@@ -62,4 +81,5 @@ function CodeEditorPanel({
     </div>
   );
 }
+
 export default CodeEditorPanel;

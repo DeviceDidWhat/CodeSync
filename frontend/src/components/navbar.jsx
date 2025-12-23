@@ -1,11 +1,13 @@
 import { Link, useLocation } from "react-router";
-import { BookOpenIcon, LayoutDashboardIcon } from "lucide-react";
+import {
+  BookOpenIcon,
+  LayoutDashboardIcon,
+  PlusCircleIcon,
+} from "lucide-react";
 import { UserButton } from "@clerk/clerk-react";
 
 function Navbar() {
   const location = useLocation();
-
-  console.log(location);
 
   const isActive = (path) => location.pathname === path;
 
@@ -29,47 +31,69 @@ function Navbar() {
             <span className="font-black text-xl bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent font-mono tracking-wider">
               CodeSync
             </span>
-            <span className="text-xs text-base-content/60 font-medium -mt-1">Code Together</span>
+            <span className="text-xs text-base-content/60 font-medium -mt-1">
+              Code Together
+            </span>
           </div>
         </Link>
 
+        {/* NAV LINKS */}
         <div className="flex items-center gap-1">
-          {/* PROBLEMS PAGE LINK */}
+          {/* PROBLEMS */}
           <Link
-            to={"/problems"}
-            className={`px-4 py-2.5 rounded-lg transition-all duration-200 
+            to="/problems"
+            className={`px-4 py-2.5 rounded-lg transition-all duration-200
               ${
                 isActive("/problems")
                   ? "bg-primary text-primary-content"
                   : "hover:bg-base-200 text-base-content/70 hover:text-base-content"
-              }
-              
-              `}
+              }`}
           >
             <div className="flex items-center gap-x-2.5">
               <BookOpenIcon className="size-4" />
-              <span className="font-medium hidden sm:inline">Problems</span>
+              <span className="font-medium hidden sm:inline">
+                Problems
+              </span>
             </div>
           </Link>
 
-          {/* DASHBORD PAGE LINK */}
+          {/* CREATE PROBLEM */}
           <Link
-            to={"/dashboard"}
-            className={`px-4 py-2.5 rounded-lg transition-all duration-200 
+            to="/create-problem"
+            className={`px-4 py-2.5 rounded-lg transition-all duration-200
+              ${
+                isActive("/create-problem")
+                  ? "bg-primary text-primary-content"
+                  : "hover:bg-base-200 text-base-content/70 hover:text-base-content"
+              }`}
+          >
+            <div className="flex items-center gap-x-2.5">
+              <PlusCircleIcon className="size-4" />
+              <span className="font-medium hidden sm:inline">
+                Create
+              </span>
+            </div>
+          </Link>
+
+          {/* DASHBOARD */}
+          <Link
+            to="/dashboard"
+            className={`px-4 py-2.5 rounded-lg transition-all duration-200
               ${
                 isActive("/dashboard")
                   ? "bg-primary text-primary-content"
                   : "hover:bg-base-200 text-base-content/70 hover:text-base-content"
-              }
-              
-              `}
+              }`}
           >
             <div className="flex items-center gap-x-2.5">
               <LayoutDashboardIcon className="size-4" />
-              <span className="font-medium hidden sm:inline">Dashbord</span>
+              <span className="font-medium hidden sm:inline">
+                Dashboard
+              </span>
             </div>
           </Link>
 
+          {/* USER */}
           <div className="ml-4 mt-2">
             <UserButton />
           </div>
