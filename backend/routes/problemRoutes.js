@@ -13,8 +13,8 @@ const router = express.Router();
 /* -----------------------
    PUBLIC ROUTES
 ----------------------- */
-router.get("/", getAllProblems);
-router.get("/:slug", getProblemBySlug);
+router.get("/", protectRoute, getAllProblems);
+router.get("/:slug", protectRoute, getProblemBySlug);
 
 /* -----------------------
    ADMIN ONLY
