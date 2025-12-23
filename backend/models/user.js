@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    controlAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true } // createdAt, updatedAt
 );

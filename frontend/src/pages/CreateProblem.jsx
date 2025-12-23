@@ -83,7 +83,7 @@ function CreateProblem() {
           <div className="col-span-12 lg:col-span-4 space-y-8">
             <section className="bg-[#141210] p-7 rounded-[2.5rem] border border-stone-800/40 shadow-xl">
               <h3 className="text-[10px] font-black text-stone-500 uppercase tracking-[0.4em] mb-8 flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></div> 01. Identity
+                <div className="w-1.5 h-1.5 rounded-full"></div> 01. Identity
               </h3>
               
               <div className="space-y-6">
@@ -114,7 +114,7 @@ function CreateProblem() {
 
             <section className="bg-[#141210] p-7 rounded-[2.5rem] border border-stone-800/40 shadow-xl">
               <h3 className="text-[10px] font-black text-stone-500 uppercase tracking-[0.4em] mb-8 flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div> 02. Signature
+                <div className="w-1.5 h-1.5 rounded-full"></div> 02. Signature
               </h3>
               <div className="space-y-6">
                 <div>
@@ -143,10 +143,9 @@ function CreateProblem() {
           <div className="col-span-12 lg:col-span-5">
             <section className="bg-[#141210] p-8 rounded-[3rem] border border-stone-800/40 shadow-xl h-full flex flex-col relative">
               <div className="absolute top-0 right-0 p-10 pointer-events-none opacity-[0.03]">
-                <FiMessageSquare size={150} />
               </div>
               <h3 className="text-[10px] font-black text-stone-500 uppercase tracking-[0.4em] mb-8 flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div> 03. Content
+                <div className="w-1.5 h-1.5 rounded-full"></div> 03. Content
               </h3>
               
               <div className="space-y-8 flex-grow">
@@ -172,7 +171,7 @@ function CreateProblem() {
           <div className="col-span-12 lg:col-span-3 space-y-8">
             <section className="bg-[#141210] p-7 rounded-[2.5rem] border border-stone-800/40 shadow-xl h-full">
               <h3 className="text-[10px] font-black text-stone-500 uppercase tracking-[0.4em] mb-8 flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-orange-600 animate-pulse"></div> 04. Validation
+                <div className="w-1.5 h-1.5 rounded-full"></div> 04. Validation
               </h3>
               <div className="space-y-6">
                 <div>

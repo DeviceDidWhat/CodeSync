@@ -10,14 +10,16 @@ function ProblemDescription({
     <div className="h-full overflow-y-auto bg-base-200">
       {/* HEADER SECTION */}
       <div className="p-6 bg-base-100 border-b border-base-300">
-        <div className="flex items-start justify-between mb-3">
-          <h1 className="text-3xl font-bold text-base-content">
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-3xl font-bold text-base-content leading-tight flex-1 min-w-[200px] mr-4">
             {problem.title}
           </h1>
 
           <span
-            className={`badge ${getDifficultyBadgeClass(problem.difficulty)}`}
-          >
+      className={`badge whitespace-nowrap ${getDifficultyBadgeClass(
+        problem.difficulty
+      )}`}
+    >
             {problem.difficulty}
           </span>
         </div>
