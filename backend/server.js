@@ -29,6 +29,10 @@ app.use("/api/chat", chatRoutes)
 app.use("/api/sessions", sessionRoutes)
 app.use("/api/problems", problemRoutes);
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ msg: "api is up and running" });
+});
+
 // GET /api/users/me
 app.get("/api/users/me", protectRoute, (req, res) => {
   res.json({
