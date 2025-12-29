@@ -1,4 +1,5 @@
 import express from 'express';
+import http from "http";
 import path from "path";
 import cors from "cors";
 import {serve} from "inngest/express";
@@ -12,8 +13,10 @@ import chatRoutes from "./routes/chatRoutes.js"
 import sessionRoutes from "./routes/sessionRoute.js"
 import problemRoutes from "./routes/problemRoutes.js";
 import { protectRoute } from './middleware/protectRoute.js';
+import { initializeSocket } from './util/socket.js';
 
 const app = express();
+const httpServer = http.createServer(app);
 
 const __dirname = path.resolve()
 
@@ -54,7 +57,8 @@ if (ENV.NODE_ENV === "production") {
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(ENV.PORT, () => {
+    initializeSocket(httpServer);
+    httpServer.listen(ENV.PORT, () => {
       console.log(`Server is running on port ${ENV.PORT}`);
     });
   } catch (error) {
