@@ -1,6 +1,7 @@
 import { useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
+import { io } from "socket.io-client";
 import { useEndSession, useJoinSession, useSessionById } from "../hooks/useSessions.js";
 import { useProblem } from "../hooks/useProblems";
 import toast from "react-hot-toast";
@@ -36,7 +37,49 @@ function SessionPage() {
     isLoading: loadingProblem,
   } = useProblem(session?.problem);
   const isHost = session?.host?.clerkId === user?.id;
-  const isParticipant = session?.participant?.clerkId === user?.id;
+  const isParticipant = Array.isArray(session?.participant)
+    ? session.participant.some((p) => p?.clerkId === user?.id || p === user?.id)
+    : session?.participant?.clerkId === user?.id || session?.participant === user?.id;
+
+  const [socket, setSocket] = useState(null);
+  const isRemoteUpdate = useRef(false);
+
+  useEffect(() => {
+    const baseUrl = import.meta.env.VITE_API_URL;
+    const socketUrl = baseUrl.endsWith("/api") ? baseUrl.slice(0, -4) : baseUrl;
+    const socketInstance = io(socketUrl);
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!socket || !id) return;
+
+    socket.emit("join-session", id);
+  }, [socket, id]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.on("code-update", (sharedCode) => {
+      isRemoteUpdate.current = true;
+      setCode(sharedCode);
+    });
+
+    socket.on("language-update", (lang) => {
+      isRemoteUpdate.current = true;
+      setSelectedLanguage(lang);
+    });
+
+
+    return () => {
+      socket.off("code-update");
+      socket.off("language-update");
+    };
+  }, [socket]);
 
   const { call, channel, chatClient, isInitializingCall, streamClient } = useStreamClient(
     session,
@@ -50,7 +93,7 @@ function SessionPage() {
   };
 
   // find the problem data based on session problem title
- 
+
 
   const [selectedLanguage, setSelectedLanguage] = useState("cpp");
   const [code, setCode] = useState(problemData?.starterCode?.[selectedLanguage] || "");
@@ -74,19 +117,27 @@ function SessionPage() {
 
   // update code when problem loads or changes
   useEffect(() => {
-  if (!problemData) return;
-  setCode(problemData.starterCode?.[selectedLanguage] || "");
-  setOutput(null);
-}, [problemData, selectedLanguage]);
+    if (!problemData) return;
+    setCode(problemData.starterCode?.[selectedLanguage] || "");
+    setOutput(null);
+  }, [problemData, selectedLanguage]);
 
 
   const handleLanguageChange = (e) => {
     const newLang = e.target.value;
+    if (isRemoteUpdate.current) {
+      isRemoteUpdate.current = false;
+      return;
+    }
     setSelectedLanguage(newLang);
     // use problem-specific starter code
     const starterCode = problemData?.starterCode?.[newLang] || "";
     setCode(starterCode);
     setOutput(null);
+    socket?.emit("language-change", {
+      sessionId: id,
+      language: newLang,
+    });
   };
 
   const handleRunCode = async () => {
@@ -170,7 +221,7 @@ function SessionPage() {
                         )}
                         <p className="text-base-content/60 mt-2">
                           Host: {session?.host?.name || "Loading..."} •{" "}
-                            {hasParticipant(session) ? 2 : 1}/2 participants
+                          {hasParticipant(session) ? 2 : 1}/2 participants
                         </p>
                       </div>
 
@@ -288,7 +339,18 @@ function SessionPage() {
                       code={code}
                       isRunning={isRunning}
                       onLanguageChange={handleLanguageChange}
-                      onCodeChange={(value) => setCode(value)}
+                      onCodeChange={(value) => {
+                        if (isRemoteUpdate.current) {
+                          isRemoteUpdate.current = false;
+                          return;
+                        }
+
+                        setCode(value);
+                        socket?.emit("code-change", {
+                          sessionId: id,
+                          code: value,
+                        });
+                      }}
                       onRunCode={handleRunCode}
                     />
                   </Panel>
