@@ -7,16 +7,36 @@ function OutputPanel({ output }) {
       <div className="flex-1 overflow-auto p-4">
         {output === null ? (
           <p className="text-base-content/50 text-sm">Click "Run Code" to see the output here...</p>
-        ) : output.success ? (
-          <pre className="text-sm font-mono text-success whitespace-pre-wrap">{output.output}</pre>
         ) : (
           <div>
-            {output.output && (
-              <pre className="text-sm font-mono text-base-content whitespace-pre-wrap mb-2">
-                {output.output}
-              </pre>
+            {/* Execution stats */}
+            {(output.executionTime !== undefined || output.compilationTime !== undefined) && (
+              <div className="mb-3 text-xs text-base-content/60 space-y-1">
+                {output.compilationTime !== undefined && (
+                  <div>⏱️ Compilation: {output.compilationTime}ms</div>
+                )}
+                {output.executionTime !== undefined && (
+                  <div>⚡ Execution: {output.executionTime}ms</div>
+                )}
+                {output.timeLimitExceeded && (
+                  <div className="text-warning font-semibold">⚠️ Time Limit Exceeded</div>
+                )}
+              </div>
             )}
-            <pre className="text-sm font-mono text-error whitespace-pre-wrap">{output.error}</pre>
+
+            {/* Output content */}
+            {output.success ? (
+              <pre className="text-sm font-mono text-success whitespace-pre-wrap">{output.output}</pre>
+            ) : (
+              <div>
+                {output.output && (
+                  <pre className="text-sm font-mono text-base-content whitespace-pre-wrap mb-2">
+                    {output.output}
+                  </pre>
+                )}
+                <pre className="text-sm font-mono text-error whitespace-pre-wrap">{output.error}</pre>
+              </div>
+            )}
           </div>
         )}
       </div>

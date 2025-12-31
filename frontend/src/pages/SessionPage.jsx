@@ -13,6 +13,7 @@ import { Loader2Icon, LogOutIcon, PhoneOffIcon } from "lucide-react";
 import CodeEditorPanel from "../components/CodeEditorPanel";
 import OutputPanel from "../components/OutputPanel";
 import { generateCppJudge } from "../util/judge.js";
+import { generateCppJudgeStdin, generateStdinInput } from "../util/judgeStdin.js";
 
 import useStreamClient from "../hooks/useStreamClient";
 import { StreamCall, StreamVideo } from "@stream-io/video-react-sdk";
@@ -147,8 +148,23 @@ function SessionPage() {
     setOutput(null);
 
     try {
-      const finalCode = generateCppJudge(problemData, code);
-      const result = await executeCode(selectedLanguage, finalCode);
+      // Check if test cases are too large (use stdin method if total size > 10KB)
+      const totalTestCaseSize = JSON.stringify(problemData.testCases).length;
+      const useStdinMethod = totalTestCaseSize > 10 * 1024; // 10KB threshold
+
+      let finalCode;
+      let stdin = '';
+
+      if (useStdinMethod) {
+        // Use stdin-based approach for large test cases
+        finalCode = generateCppJudgeStdin(problemData, code);
+        stdin = generateStdinInput(problemData);
+      } else {
+        // Use traditional embedded approach for small test cases
+        finalCode = generateCppJudge(problemData, code);
+      }
+
+      const result = await executeCode(selectedLanguage, finalCode, stdin);
 
       setOutput(result);
       setIsRunning(false);

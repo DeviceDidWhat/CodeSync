@@ -9,6 +9,7 @@ import CodeEditorPanel from "../components/CodeEditorPanel";
 
 import { useProblem } from "../hooks/useProblems";
 import { generateCppJudge } from "../util/judge.js";
+import { generateCppJudgeStdin, generateStdinInput } from "../util/judgeStdin.js";
 import { executeCode } from "../util/piston.js";
 
 import toast from "react-hot-toast";
@@ -62,35 +63,56 @@ function ProblemPage() {
     setIsRunning(true);
     setOutput(null);
 
-    const finalCode = generateCppJudge(currentProblem, code);
-    const result = await executeCode(selectedLanguage, finalCode);
+    try {
+      // Check if test cases are too large (use stdin method if total size > 10KB)
+      const totalTestCaseSize = JSON.stringify(currentProblem.testCases).length;
+      const useStdinMethod = totalTestCaseSize > 10 * 1024; // 10KB threshold
 
-    setOutput(result);
-    setIsRunning(false);
+      let finalCode;
+      let stdin = '';
 
-    if (!result.success) {
-      toast.error("Code execution failed");
-      return;
-    }
+      if (useStdinMethod) {
+        // Use stdin-based approach for large test cases
+        finalCode = generateCppJudgeStdin(currentProblem, code);
+        stdin = generateStdinInput(currentProblem);
+      } else {
+        // Use traditional embedded approach for small test cases
+        finalCode = generateCppJudge(currentProblem, code);
+      }
 
-    const actualResults = result.output
-      .trim()
-      .split("\n")
-      .map((l) => l.trim());
+      const result = await executeCode(selectedLanguage, finalCode, stdin);
 
-    const expectedResults = currentProblem.testCases.map((tc) =>
-      JSON.stringify(tc.output)
-    );
+      setOutput(result);
+      setIsRunning(false);
 
-    const passed = actualResults.every(
-      (res, i) => res === expectedResults[i]
-    );
+      if (!result.success) {
+        toast.error("Code execution failed");
+        return;
+      }
 
-    if (passed) {
-      triggerConfetti();
-      toast.success("All tests passed!");
-    } else {
-      toast.error("Tests failed. Check your output.");
+      const actualResults = result.output
+        .trim()
+        .split("\n")
+        .map((l) => l.trim());
+
+      const expectedResults = currentProblem.testCases.map((tc) =>
+        JSON.stringify(tc.output)
+      );
+
+      const passed = actualResults.every(
+        (res, i) => res === expectedResults[i]
+      );
+
+      if (passed) {
+        triggerConfetti();
+        toast.success("All tests passed!");
+      } else {
+        toast.error("Tests failed. Check your output.");
+      }
+    } catch (err) {
+      setIsRunning(false);
+      toast.error("Execution error");
+      console.error(err);
     }
   };
 

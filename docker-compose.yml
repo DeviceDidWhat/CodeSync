@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Redis for queue management (optional but recommended)
+  redis:
+    image: redis:7-alpine
+    container_name: codesync-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    networks:
+      - codesync-network
+
+  # MongoDB (if not using external MongoDB)
+  # Uncomment if you want to run MongoDB locally
+  # mongodb:
+  #   image: mongo:7
+  #   container_name: codesync-mongodb
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=admin
+  #     - MONGO_INITDB_ROOT_PASSWORD=password
+  #   volumes:
+  #     - mongodb-data:/data/db
+  #   restart: unless-stopped
+  #   networks:
+  #     - codesync-network
+
+volumes:
+  redis-data:
+    driver: local
+  # mongodb-data:
+  #   driver: local
+
+networks:
+  codesync-network:
+    driver: bridge
