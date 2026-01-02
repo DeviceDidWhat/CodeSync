@@ -18,9 +18,6 @@ function ProblemPage() {
   const { id: slug } = useParams();
   const navigate = useNavigate();
 
-  /* -----------------------------
-     FETCH REAL PROBLEM FROM DB
-  ----------------------------- */
   const { data: currentProblem, isLoading } = useProblem(slug);
 
   const [selectedLanguage, setSelectedLanguage] = useState("cpp");
@@ -34,13 +31,14 @@ function ProblemPage() {
   useEffect(() => {
     if (!currentProblem) return;
 
-    setCode(currentProblem.starterCode?.cpp || "");
+    setCode(currentProblem.starterCode?.[selectedLanguage] || "");
     setOutput(null);
-  }, [currentProblem]);
+  }, [currentProblem, selectedLanguage]);
 
   const handleLanguageChange = (e) => {
-    setSelectedLanguage(e.target.value);
-    setCode(currentProblem.starterCode.cpp);
+    const lang = e.target.value;
+    setSelectedLanguage(lang);
+    setCode(currentProblem.starterCode?.[lang] || "");
     setOutput(null);
   };
 
@@ -51,6 +49,15 @@ function ProblemPage() {
   const triggerConfetti = () => {
     confetti({ particleCount: 80, spread: 250, origin: { x: 0.2, y: 0.6 } });
     confetti({ particleCount: 80, spread: 250, origin: { x: 0.8, y: 0.6 } });
+  };
+
+  /* -----------------------------
+     ✅ RESTART BUTTON HANDLER
+  ----------------------------- */
+  const handleResetCode = () => {
+    const starterCode = currentProblem?.starterCode?.[selectedLanguage] || "";
+    setCode(starterCode);
+    setOutput(null);
   };
 
   /* -----------------------------
@@ -94,9 +101,6 @@ function ProblemPage() {
     }
   };
 
-  /* -----------------------------
-     LOADING / ERROR STATES
-  ----------------------------- */
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -119,7 +123,6 @@ function ProblemPage() {
 
       <div className="flex-1">
         <PanelGroup direction="horizontal">
-          {/* LEFT: PROBLEM DESCRIPTION */}
           <Panel defaultSize={40} minSize={30}>
             <ProblemDescription
               problem={currentProblem}
@@ -130,7 +133,6 @@ function ProblemPage() {
 
           <PanelResizeHandle className="w-2 bg-base-300 cursor-col-resize" />
 
-          {/* RIGHT: EDITOR + OUTPUT */}
           <Panel defaultSize={60} minSize={30}>
             <PanelGroup direction="vertical">
               <Panel defaultSize={70}>
@@ -141,6 +143,7 @@ function ProblemPage() {
                   onLanguageChange={handleLanguageChange}
                   onCodeChange={setCode}
                   onRunCode={handleRunCode}
+                  onResetCode={handleResetCode}
                 />
               </Panel>
 

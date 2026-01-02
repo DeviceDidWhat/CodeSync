@@ -61,6 +61,17 @@ function SessionPage() {
     socket.emit("join-session", id);
   }, [socket, id]);
 
+  const handleResetCode = () => {
+    const starterCode = problemData?.starterCode?.[selectedLanguage] || "";
+    setCode(starterCode);
+    setOutput(null);
+
+    socket?.emit("code-change", {
+      sessionId: id,
+      code: starterCode,
+    });
+  };
+
   useEffect(() => {
     if (!socket) return;
 
@@ -352,6 +363,7 @@ function SessionPage() {
                         });
                       }}
                       onRunCode={handleRunCode}
+                      onResetCode={handleResetCode}
                     />
                   </Panel>
 
