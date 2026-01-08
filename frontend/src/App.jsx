@@ -8,27 +8,30 @@ import ProblemPage from './pages/ProblemPage'
 import SessionPage from './pages/SessionPage'
 import CreateProblem from "./pages/CreateProblem";
 import AdminRoute from "./components/AdminRoute";
+import AdminRecordingsPage from "./pages/AdminRecordingsPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import { Toaster } from 'react-hot-toast'
 
 function App() {
-  const{isSignedIn,isLoaded}=useUser();  
+  const { isSignedIn, isLoaded } = useUser();
 
   //In order to get rid of flickering issue
-  if(!isLoaded){
+  if (!isLoaded) {
     return null;
   }
 
   return (
     <>
-    <Routes>
-      <Route path="/" element={!isSignedIn ? <HomePage /> : <Navigate to={"/dashboard"} />} />
-      <Route path="/dashboard" element={isSignedIn ? <DashboardPage /> : <Navigate to={"/"} />} />
-      <Route path="/problems" element={isSignedIn ? <ProblemsPage /> : <Navigate to={"/"} />} />
-      <Route path="/problem/:id" element={isSignedIn ? <ProblemPage /> : <Navigate to={"/"} />} />
-      <Route path="/session/:id" element={isSignedIn ? <SessionPage /> : <Navigate to={"/"} />} />
-      <Route path="/create-problem" element={<CreateProblem />} />
-      {/*ADMIN ONLY */}
-      {/* <Route
+      <Routes>
+        <Route path="/" element={!isSignedIn ? <HomePage /> : <Navigate to={"/dashboard"} />} />
+        <Route path="/dashboard" element={isSignedIn ? <DashboardPage /> : <Navigate to={"/"} />} />
+        <Route path="/problems" element={isSignedIn ? <ProblemsPage /> : <Navigate to={"/"} />} />
+        <Route path="/problem/:id" element={isSignedIn ? <ProblemPage /> : <Navigate to={"/"} />} />
+        <Route path="/session/:id" element={isSignedIn ? <SessionPage /> : <Navigate to={"/"} />} />
+        <Route path="/create-problem" element={<CreateProblem />} />
+        <Route path="/recordings" element={isSignedIn ? <AdminRecordingsPage /> : <Navigate to={"/"} />} />
+        {/*ADMIN ONLY */}
+        {/* <Route
         path="/create-problem"
         element={
           <AdminRoute>
@@ -36,9 +39,11 @@ function App() {
           </AdminRoute>
         }
       /> */}
-    </Routes>
+        {/* 404 - Catch all unknown routes */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
 
-    <Toaster toastOptions={{duration: 3000}}/>
+      <Toaster toastOptions={{ duration: 3000 }} />
     </>
   );
 }
