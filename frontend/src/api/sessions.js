@@ -32,4 +32,15 @@ export const sessionApi = {
     const response = await axiosInstance.get(`/chat/token`);
     return response.data;
   },
+  getSessionRecordings: async (id) => {
+    const response = await axiosInstance.get(`/sessions/${id}/recordings`);
+    return response.data;
+  },
+  getAllRecordings: async () => {
+    const response = await axiosInstance.get("/sessions/admin/all-recordings");
+    return response.data;
+  },
 };
+
+export const getSessionRecordings = (id) => sessionApi.getSessionRecordings(id);
+export const getAllRecordings = () => sessionApi.getAllRecordings();
