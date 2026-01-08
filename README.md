@@ -1,4 +1,4 @@
-# 🚀 CodeSync — Full-Stack Interview Platform
+# CodeSync — Full-Stack Interview Platform
 
 A modern, production-grade full-stack interview and collaborative coding platform designed for real-time technical interviews, practice problems, and live code evaluation — all in one place.
 
